@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Submission Assignment 2</title>
+        <link rel="stylesheet" href="/School Exam/Practice Exercises/Game/css/catGame.css"> 
+
+    </head>
+
+    <body>
+        <!-- Buttons used to control the cat and a button to feed the fish -->
+        <div id="menue-container">
+            <input id="move-left-btn" type="button" value="Left">
+            <input id="move-up-btn" type="button" value="Up">
+            <input id="move-right-btn" type="button" value="Right">
+            <input id="move-down-btn" type="button" value="Down">
+            <input id="fish-food-btn" type="button" value="Feed the fish">
+        </div>
+
+        <!-- The game itself and images of the cat, fish, and fish food -->
+        <div id="game-container">
+            <p>Number of steps: <span id="number-of-steps-span">0</span></p>
+            <img id="miaow-miaow" src="/School Exam/Practice Exercises/Game/images/miaow-miaow.png">
+            <img id="the-mighty-fish" src="/School Exam/Practice Exercises/Game/images/fish.png">
+            <h2 id="fish-room-title">Fish Room</h2>
+            <div id="line-div"></div>
+            <img id="fish-food-img" src="/School Exam/Practice Exercises/Game/images/fish-food.png">
+        </div>
+
+        <!-- Dialogue between the cat and the fish -->
+        <div id="dialogue-output-div">
+            <p>Miaow Miaow: <span id="miaow-miaow-says">...</span></p>
+            <p>Fish: <span id="fish-says">...</span></p>
+        </div>
+
+        <script>
+            // Retrieve buttons and HTML elements for use in JavaScript
+            const moveLeftBtn = document.getElementById("move-left-btn");
+            const moveUpBtn = document.getElementById("move-up-btn");
+            const moveRightBtn = document.getElementById("move-right-btn");
+            const moveDownBtn = document.getElementById("move-down-btn");
+            const fishFoodBtn = document.getElementById("fish-food-btn")
+            
+            const dialogueOutput = document.getElementById("dialogue-output-div");
+
+            const miaowMiaow = document.getElementById("miaow-miaow");
+            const theMightyFish = document.getElementById("the-mighty-fish");
+            const miaowMiaowSays = document.getElementById("miaow-miaow-says");
+            const theMightFishSays = document.getElementById("fish-says")
+
+            const stepCount = document.getElementById("number-of-steps-span");
+            const fishFoodImg = document.getElementById("fish-food-img")
+
+            // Variables to count the number of steps and the cat's position
+            let steps = 0;
+            let miaowMiaowPosition = {left: 100, top: 250};
+
+            // Questions from the cat stored in an array
+            const miaowMiaowQuestions = [
+                "Hello there! What are you doing here?",
+                "Who is tougher between us?",
+                "Can you tell me a joke?",
+                "Can I come visit?",
+                "Shall we play green light, red light?"
+            ];
+
+            // Responses from the fish stored in an array
+            const theMightyFishResponses = [
+                "Keep your distance, I have been told not to talk to strangers!",
+                "I don’t know, but this is my spot!",
+                "No! Don’t come closer!",
+                "This is my territory!",
+                "I’ll get the shark if you bother me!"
+            ];
+
+            // Function to update the step count
+            function updateSteps() {
+                steps++;
+                stepCount.textContent = steps;
+            }
+
+            // Function to update the cat's position
+            function updateMiaowMiaowPosition() {
+                miaowMiaow.style.left = miaowMiaowPosition.left + "px";
+                miaowMiaow.style.top = miaowMiaowPosition.top + "px";
+            }
+
+            // Function to move the cat based on button clicks
+            function moveMiaowMiaow(event) { // Using (event) that contains information about which button was clicked
+                switch (event.target) { // Switch-case: checks which button the user clicks based on the click target (event.target)
+                    case moveLeftBtn:
+                        if (miaowMiaowPosition.left > 0) miaowMiaowPosition.left -= 50;
+                        break;
+                    case moveUpBtn:
+                        if (miaowMiaowPosition.top > 0) miaowMiaowPosition.top -= 50;
+                        break;
+                    case moveRightBtn:
+                        miaowMiaowPosition.left += 50;
+                        if (miaowMiaowPosition.left >= 700) resetMiaowMiaow(); // This resets the cat if it gets too close to the fish
+                        break;
+                    case moveDownBtn:
+                        miaowMiaowPosition.top += 50;
+                        break;
+                }
+                updateMiaowMiaowPosition(); // Updates the position on the screen
+                updateSteps(); // Updates the step count
+            }
+        
+            // Triggers dialogue between the cat and the fish 
+            function triggerDialogue() {
+                if (miaowMiaowPosition.left >= 600 && miaowMiaowPosition.left < 700) {
+                    const randomQuestion = miaowMiaowQuestions[Math.floor(Math.random() * miaowMiaowQuestions.length)];
+                    const randomResponse = theMightyFishResponses[Math.floor(Math.random() * theMightyFishResponses.length)];
+                   
+                    dialogueOutput.innerHTML = `
+                        <p>Miaow Miaow: ${randomQuestion}</p>
+                        <p>Fish: ${randomResponse}</p>
+                    `;
+                } else {
+                    dialogueOutput.innerHTML = `
+                        <p>Miaow Miaow: Hi!</p>
+                        <p>Miaow Miaow: Huh? I can’t hear you, but don’t come closer!</p>
+                    `;
+                }
+            }
+
+            // Reset, resets the cat’s position and warns if it gets too close to the fish
+            function resetMiaowMiaow() {
+                miaowMiaowPosition = {left: 100, top: 250};
+                updateMiaowMiaowPosition();
+                alert("Miaow Miaow got too close to the fish!");
+            }
+
+            // Function to give fish food to the fish with a warning to get closer to the fish
+            function showFishFood() {
+                if (miaowMiaowPosition.left >= 600 && miaowMiaowPosition.left < 700) {
+                    fishFoodImg.style.display = "block"; // Shows the fish food
+                    dialogueOutput.innerHTML = `
+                    <p>Miaow Miaow: Don’t call the shark on me please! Here’s a snack!</p>
+                    <p>Fish: Ok, nice!</p>
+                `;
+                } else {
+                    alert("Miaow Miaow needs to get closer to the fish!")
+                }
+                setTimeout(() => {
+                    fishFoodImg.style.display = "none"; // Hides the fish food after 4 seconds
+                }, 4000);
+            }
+
+            // Buttons to control the cat's movement
+            moveLeftBtn.onclick = moveMiaowMiaow;
+            moveUpBtn.onclick = moveMiaowMiaow;
+            moveRightBtn.onclick = moveMiaowMiaow;
+            moveDownBtn.onclick = moveMiaowMiaow;
+
+            // Dialogue triggered when clicking on the cat and the button to feed the fish
+            theMightyFish.onclick = triggerDialogue;
+            fishFoodBtn.onclick = showFishFood;
+
+        </script>
+
+    </body>
+</html>
