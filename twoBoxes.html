@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Boxes</title>
+    <style>
+        body {
+            background-color: moccasin;
+            color: rgb(23, 23, 23);
+            font-weight: bold;
+        }
+        .box {
+            height: 100px;
+            background-color: white;
+            line-height: 100px;
+            text-align: center;
+            margin: 10px;
+        }
+        #box1, #box2 {
+            width: 100px;
+        }  
+        #increaseBox1, #decreaseBox1 {
+            color: lightcoral;  
+        }
+        #increaseBox2, #decreaseBox2 {
+            color: cornflowerblue;
+        }
+    </style>
+</head>
+<body>
+    <!-- Buttons to control the width of the boxes -->
+    <input id="increaseBox1" type="button" value="Increase Box 1 Width">
+    <input id="decreaseBox1" type="button" value="Decrease Box 1 Width">
+    <input id="increaseBox2" type="button" value="Increase Box 2 Width">
+    <input id="decreaseBox2" type="button" value="Decrease Box 2 Width">
+
+    <!-- Boxes whose width can be modified -->
+    <div id="box1" class="box"></div>
+    <div id="box2" class="box"></div>
+
+    <!-- Display the total number of clicks -->
+    <p id="clickAmount">Number of clicks:</p>
+
+    <script>
+        // Get references to HTML elements for later use
+        const box1 = document.getElementById("box1");
+        const box2 = document.getElementById("box2");
+        const clickAmountDisplay = document.getElementById("clickAmount");
+
+        // Get references to the buttons for increasing and decreasing the box widths
+        const increaseBox1Button = document.getElementById("increaseBox1");
+        const decreaseBox1Button = document.getElementById("decreaseBox1");
+        const increaseBox2Button = document.getElementById("increaseBox2");
+        const decreaseBox2Button = document.getElementById("decreaseBox2");
+
+        // Variables to track the number of clicks and the widths of the boxes
+        let totalClicks = 0;
+        let widthBox1 = 100;
+        let widthBox2 = 100;
+
+        // Function to update the click count and display it
+        function updateClickAmount() {
+            totalClicks++;
+            clickAmountDisplay.textContent = `Number of clicks: ${totalClicks}`;
+        }
+        
+        // Function to update the width of a box and adjust its appearance based on the width
+        function updateBox(box, width) {
+            box.style.width = width + "px";  // Set the new width
+            box.textContent = `${box.id === 'box1' ? 'Box 1' : 'Box 2'}: ${width}px`;  // Display the current width
+
+            // Change the background color based on the width
+            if (width < 200) {
+                box.style.backgroundColor = "white";
+            } else if (width >= 200 && width <= 300) {
+                box.style.backgroundColor = "orange";
+            } else {
+                box.style.backgroundColor = "red";
+            } 
+        }
+
+        // Function to increase Box 1's width by 50px, while ensuring it doesn't exceed 350px
+        function increaseBox1() {
+            if (widthBox1 + 50 <= 350) {
+                widthBox1 += 50;
+                updateBox(box1, widthBox1);
+                updateClickAmount();
+            }
+        }
+
+        // Function to decrease Box 1's width by 50px, ensuring it doesn't go below 50px
+        function decreaseBox1() {
+            if (widthBox1 - 50 >= 50) {
+                widthBox1 -= 50;
+                updateBox(box1, widthBox1);
+                updateClickAmount();
+            } else {
+                alert("The box cannot be smaller.");
+            }
+        }
+
+        // Function to increase Box 2's width by 50px, while ensuring it doesn't exceed 350px
+        function increaseBox2() {
+            if (widthBox2 + 50 <= 350) {
+                widthBox2 += 50;
+                updateBox(box2, widthBox2);
+                updateClickAmount();
+            } 
+        }
+
+        // Function to decrease Box 2's width by 50px, ensuring it doesn't go below 50px
+        function decreaseBox2() {
+            if (widthBox2 - 50 >= 50) {
+                widthBox2 -= 50;
+                updateBox(box2, widthBox2);
+                updateClickAmount();
+            } else {
+                alert("The box cannot be smaller.");
+            }
+        }
+
+        // Set up onclick events for the buttons
+        increaseBox1Button.onclick = increaseBox1;
+        decreaseBox1Button.onclick = decreaseBox1;
+        increaseBox2Button.onclick = increaseBox2;
+        decreaseBox2Button.onclick = decreaseBox2;
+    </script>
+</body>
+</html>
