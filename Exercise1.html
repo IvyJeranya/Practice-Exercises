@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 1</title>
+    <style>
+        #container{
+            width: 800px;
+            height: 500px;
+            border: 1px solid rgb(30, 30, 30);
+            margin: auto;
+            position: relative;
+        }
+        #rob{
+            position: absolute;
+            height: 100px;
+            left: 100px;
+            top: 100px;
+        }
+        #rob-output img{
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <button id="d-b">Down</button>
+        <button id="u-b">Up</button>
+        <button id="r-b">Right</button>
+        <button id="l-b">Left</button>        
+        <p>Number of clicks: <span id="n-c-span">0</span></p>        
+        
+        <label>Number of Robs</label>
+        <input id="n-robs" type="text">
+        <button id="gen-robs">Generate Robs</button>
+        
+        <img id="rob" src="/School Exam/Practice Exercises/General Exercise/images/rb1.png" alt="Robot">
+        <div id="rob-output"></div>
+    </div>
+
+    <script>
+        // Retrieve references to elements in HTML to use in JavaScript
+        const rob = document.getElementById("rob"); 
+        const clickCountSpan = document.getElementById("n-c-span"); 
+        const robOutput = document.getElementById("rob-output"); 
+        const numRobsInput = document.getElementById("n-robs"); 
+        const generateRobsButton = document.getElementById("gen-robs"); 
+
+        // References to the movement buttons
+        const upButton = document.getElementById("u-b"); 
+        const downButton = document.getElementById("d-b");
+        const rightButton = document.getElementById("r-b");
+        const leftButton = document.getElementById("l-b");
+
+        // Variables for the robot's position and speed
+        let topPosition = 100;
+        let leftPosition = 100;
+        let speed = 10;
+        let clickCount = 0;
+
+        // Function to update the robot's position on the screen
+        function updatePosition() {
+            rob.style.top = `${topPosition}px`;
+            rob.style.left = `${leftPosition}px`;
+        }
+
+        // Function to increase the speed by 10px per click and update the click count
+        function increaseSpeed() {
+            speed += 10;
+            clickCount++;
+            clickCountSpan.textContent = clickCount;
+        }
+
+        // Functions to move the robot
+        function moveUp() {
+            topPosition -= speed;
+            increaseSpeed();
+            updatePosition();
+        }
+
+        function moveDown() {
+            topPosition += speed;
+            increaseSpeed();
+            updatePosition();
+        }
+
+        function moveRight() {
+            leftPosition += speed;
+            increaseSpeed();
+            updatePosition();
+        }
+
+        function moveLeft() {
+            leftPosition -= speed;
+            increaseSpeed();
+            updatePosition();
+        }
+
+        // Function to generate Robs based on the number entered by the user
+        function generateRobs() {
+            const numRobs = Number(numRobsInput.value); // Retrieve the number of Robs from the input field and convert it to a number
+
+            // If the input is invalid, show an error message
+            if (numRobs <= 0) {
+                robOutput.innerHTML = "<p>Please enter a valid number of Robs (positive integer)!</p>";
+            } else {
+                // Generate Rob images and display them
+                let robHtml = "";
+                for (let i = 0; i < numRobs; i++) {
+                    robHtml += `<img src="/School Exam/Practice Exercises/General Exercise/images/rb1.png" alt="Rob ${i + 1}">`;
+                }
+
+                robOutput.innerHTML = robHtml; // Display the generated Robs in the rob-output div
+            }
+        }
+
+        // Functions for button clicks (onclick events) to perform tasks on the page
+        upButton.onclick = moveUp;
+        downButton.onclick = moveDown;
+        rightButton.onclick = moveRight;
+        leftButton.onclick = moveLeft;
+        generateRobsButton.onclick = generateRobs;
+    </script>
+</body>
+</html>
