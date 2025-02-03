@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 3</title>
+    <style>
+        #container{
+            width: 800px;            
+            border: 1px solid rgb(30, 30, 30);
+            margin: auto;
+            position: relative;
+        }
+        button{font-size: 1.2rem;}
+        img{width: 100px;}
+        p{font-size: 1.3rem;}
+        #out-1-div{
+            width: 300px;
+            border: 1px solid rgb(30, 30, 30);
+            min-height: 300px;
+            position: absolute;
+            top: 200px;
+            left: 0px;            
+        }
+
+        #out-2-div{
+            width: 300px;
+            border: 1px solid rgb(30, 30, 30);
+            min-height: 300px;
+            position: absolute;
+            top: 200px;
+            left: 310px;   
+        }
+
+        #out-3-div{
+            width: 170px;
+            border: 1px solid rgb(30, 30, 30);
+            min-height: 300px;
+            position: absolute;
+            top: 200px;
+            left: 630px;   
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="container">
+        <button id="g-m-btn">Give me money!</button>
+        <button id="g-c-btn">Buy 1 cookie!</button>
+        <button id="g-2-c-btn">Buy 2 cookies!</button>
+        <button id="s-l-btn">Show purchase log</button>
+
+        <p>How much money do you have: <span id="m-span">0</span></p>
+        <p>How many cookies do you have: <span id="n-c-p">0</span></p>
+
+        <div id="out-1-div">Money comes here</div>
+        <div id="out-2-div">Cookies come here</div>
+        <div id="out-3-div">Purchase log comes here</div>
+    </div>
+
+    <script> 
+        // Retrieves references to elements in HTML that will be used
+        const moneyButton = document.getElementById("g-m-btn");
+        const buy1CookieButton = document.getElementById("g-c-btn");
+        const buy2CookiesButton = document.getElementById("g-2-c-btn");
+        const showLogButton = document.getElementById("s-l-btn");
+        const moneySpan = document.getElementById("m-span");
+        const cookiesSpan = document.getElementById("n-c-p");
+        const out1Div = document.getElementById("out-1-div");
+        const out2Div = document.getElementById("out-2-div");
+        const out3Div = document.getElementById("out-3-div");
+
+        // Variables to keep track of money, cookies, and purchase log
+        let totalMoney = 0; 
+        let totalCookies = 0; 
+        let clickCount = 0; 
+        let purchaseLog = []; 
+
+        // Function for "Give me money!"
+        function giveMoney() {
+            if (clickCount < 6) {
+                totalMoney += 500; 
+                clickCount++;
+                moneySpan.innerHTML = totalMoney;
+
+                // Removes the text and adds the image of a 500 bill
+                if (clickCount === 1) out1Div.innerHTML = ""; // Clears the space before money is added.
+                out1Div.innerHTML += '<img src="/School Exam/Practice Exercises/General Exercise/images/kro.png" alt="500 bill">';
+            }
+        }
+
+        // Function for "Buy 1 cookie!"
+        function buy1Cookie() {
+            if (totalMoney >= 500) {
+                totalMoney -= 500;
+                totalCookies++;
+
+                moneySpan.innerHTML = totalMoney;
+                cookiesSpan.innerHTML = totalCookies;
+
+                // Removes the text and adds cookie image
+                if (totalCookies === 1) out2Div.innerHTML = ""; // Clears the space when the cookie is added.
+                out2Div.innerHTML += '<img src="/School Exam/Practice Exercises/General Exercise/images/coo.jpg" alt="cookie">';
+
+                purchaseLog.push("Bought 1 cookie");
+            }
+        }
+
+        // Function for "Buy 2 cookies!"
+        function buy2Cookies() {
+            if (totalMoney >= 1000) {
+                totalMoney -= 1000;
+                totalCookies += 2;
+
+                moneySpan.innerHTML = totalMoney;
+                cookiesSpan.innerHTML = totalCookies;
+
+                // Removes the text and adds cookie images
+                if (totalCookies === 2) out2Div.innerHTML = ""; // Clears the space when cookies are added.
+                out2Div.innerHTML += '<img src="/School Exam/Practice Exercises/General Exercise/images/coo.jpg" alt="cookie">'.repeat(2);
+
+                purchaseLog.push("Bought 2 cookies");
+            }
+        }
+
+        // Function for "Show purchase log"
+        function showPurchaseLog() {
+            out3Div.innerHTML = ""; // Clears the log before showing new entries
+
+            // Goes through the purchase log and adds each line to "out-3-div"
+            for (let i = 0; i < purchaseLog.length; i++) {
+                out3Div.innerHTML += `<p>${purchaseLog[i]}</p>`;
+            }
+        }
+
+        // Functions for button clicks (onclick events) to perform tasks on the page
+        moneyButton.onclick = giveMoney;
+        buy1CookieButton.onclick = buy1Cookie;
+        buy2CookiesButton.onclick = buy2Cookies;
+        showLogButton.onclick = showPurchaseLog;
+    </script>
+</body>
+</html>
