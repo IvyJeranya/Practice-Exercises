@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Array of Objects Representing Countries in America</title>
+        <style> img {height: 150px;} </style>
+    </head>
+    <body>
+        <input id="show-all-btn" type="button" value="Show All">
+
+        <div>
+            <label>Subregion</label>
+            <input id="subregion-txt" type="text">    
+            <input id="show-by-subregion-btn" type="button" value="Show by Subregion">
+        </div>
+
+        <input id="show-most-populated-btn" type="button" value="Show Most Populated Country">
+        <input id="show-least-populated-btn" type="button" value="Show Least Populated Country">
+        <input id="show-total-population-btn" type="button" value="Show Total Population in America">
+
+        <div id="output-div"></div>
+
+        <script>        
+            var countriesAmericaArray = [ 
+                // Array of objects representing countries in America with information such as name, subregion, population, and flag
+                {
+                    "name": { "common": "Dominica" },
+                    "subregion": "Caribbean",
+                    "population": 71991,
+                    "flag": { "png": "https://flagcdn.com/w320/dm.png" }
+                },
+                // (Other country objects here...)
+            ];
+
+        // Getting references to HTML elements that will be used
+            const outputDiv = document.getElementById("output-div");
+            const searchBySubregion = document.getElementById("subregion-txt");
+
+        // References to buttons
+            const showAllBtn = document.getElementById("show-all-btn");
+            const showBySubregionBtn = document.getElementById("show-by-subregion-btn");
+            const showMostPopulatedBtn = document.getElementById("show-most-populated-btn");
+            const showLeastPopulatedBtn = document.getElementById("show-least-populated-btn");
+            const showTotalPopulatedBtn = document.getElementById("show-total-population-btn");
+
+        // Function to display all countries in the list
+            function showAllCountries() {
+                let htmlTxt = ""; // Variable to hold HTML content
+                const numberOfCountries = countriesAmericaArray.length;
+
+                for (let i = 0; i < numberOfCountries; i++) {
+                    const country = countriesAmericaArray[i];
+                    htmlTxt += getCountryHTML(country); // Generate HTML for each country
+                }
+                
+                outputDiv.innerHTML = htmlTxt; // Display the result
+            }
+
+        // Function to search for countries by subregion
+            function searchSubregion() {
+                let htmlTxt = ""; // Variable to hold HTML content
+                const searchTerm = searchBySubregion.value.trim().toLowerCase(); // Get and format the search term
+
+            // Check if the search field is empty
+                if (searchTerm === "") {
+                    return outputDiv.innerHTML = "<p>Enter a subregion!</p>";
+                }
+
+            // Loop through all countries to find those matching the subregion search
+                const numberOfCountries = countriesAmericaArray.length;
+
+                for (let i = 0; i < numberOfCountries; i++) {
+                    const country = countriesAmericaArray[i];
+                // Check if the country's subregion includes the search term
+                    if (country.subregion.toLowerCase().includes(searchTerm)) {
+                        htmlTxt += getCountryHTML(country); // Add country HTML if it matches the search term
+                    }
+                }
+
+            // Display result or message if no countries were found
+                if (htmlTxt !== "") {
+                    outputDiv.innerHTML = htmlTxt; // Show matching countries
+                } else {
+                    outputDiv.innerHTML = "<p>No countries found in this subregion.</p>"; // Show message if no matches
+                }
+            }
+
+        // Function to display the most populated country
+            function showMostPopulatedCountry() {
+                let htmlTxt = ""; // Variable to hold HTML content
+                const numberOfCountries = countriesAmericaArray.length;
+                let mostPopulated = countriesAmericaArray[0]; // Start with the first country as reference
+
+            // Loop through all countries to find the one with the highest population
+                for (let i = 1; i < numberOfCountries; i++) {
+                    const country = countriesAmericaArray[i];
+
+                    if (country.population > mostPopulated.population) {
+                        mostPopulated = country; // Update if a more populated country is found
+                    }
+                }
+            // Create HTML content to display the most populated country
+                htmlTxt = `<h2>Most Populated Country:</h2>${getCountryHTML(mostPopulated)}`;
+                outputDiv.innerHTML = htmlTxt; // Show the result
+            }
+
+        // Function to display the least populated country
+            function showLeastPopulatedCountry() {
+                let htmlTxt = ""; // Variable to hold HTML content
+                const numberOfCountries = countriesAmericaArray.length;
+                let leastPopulated = countriesAmericaArray[0]; // Start with the first country as reference
+
+            // Loop through all countries to find the one with the lowest population
+                for (let i = 1; i < numberOfCountries; i++) {
+                    const country = countriesAmericaArray[i];
+
+                    if (country.population < leastPopulated.population) {
+                        leastPopulated = country; // Update if a less populated country is found
+                    }
+                }
+            // Create HTML content to display the least populated country
+                htmlTxt = `<h2>Least Populated Country:</h2>${getCountryHTML(leastPopulated)}`;
+                outputDiv.innerHTML = htmlTxt; // Show the result
+            }
+
+        // Function to show the total population of all countries in the array
+            function showTotalPopulation() {
+                let totalPopulation = 0;
+                const numberOfCountries = countriesAmericaArray.length;
+
+            // Calculate the total population by summing the population of all countries
+                for (let i = 0; i < numberOfCountries; i++) {
+                    totalPopulation += countriesAmericaArray[i].population; // Add each country's population to totalPopulation
+                }
+            // Create HTML content based on total population
+                let htmlTxt = "";
+
+                if (totalPopulation > 0) { 
+                    htmlTxt = `<h2>Total Population in America:</h2><p>${totalPopulation}</p>`; 
+                } else {
+            // Show error message if no countries found
+                    htmlTxt = "<p>No countries found!</p>";
+                }
+                outputDiv.innerHTML = htmlTxt; // Show the result
+            }
+
+        // Function to generate HTML for a country based on the 'country' object
+            function getCountryHTML(country) {
+                return `
+                    <div>
+                        <h3>${country.name.common}</h3>
+                        <p>Population: ${country.population}</p>
+                        <p>Subregion: ${country.subregion}</p>
+                        <img src="${country.flag.png}">
+                    </div>
+
+                    <!-- Horizontal separator line to separate countries -->
+                    <hr> 
+                `;
+            }
+
+        // Button click event functions to trigger specific tasks on the page
+            showAllBtn.onclick = showAllCountries;
+            showBySubregionBtn.onclick = searchSubregion;
+            showMostPopulatedBtn.onclick = showMostPopulatedCountry;
+            showLeastPopulatedBtn.onclick = showLeastPopulatedCountry;
+            showTotalPopulatedBtn.onclick = showTotalPopulation;
+        </script>
+
+    </body>
+</html>
